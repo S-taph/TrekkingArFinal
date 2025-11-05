@@ -1,0 +1,420 @@
+{
+  "info": {
+    "name": "TrekkingAR API",
+    "description": "Colección completa de endpoints para la API de TrekkingAR",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔧 Sistema",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Test Connection",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/test",
+              "host": ["{{base_url}}"],
+              "path": ["test"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔐 Autenticación",
+      "item": [
+        {
+          "name": "Registro de Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('auth_token', response.data.token);",
+                  "        console.log('Token guardado:', response.data.token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre_usuario\": \"Juan Pérez\",\n  \"email_usuario\": \"juan@example.com\",\n  \"password\": \"123456\",\n  \"telefono_usuario\": \"+54 9 11 1234-5678\",\n  \"fecha_nacimiento\": \"1990-05-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('auth_token', response.data.token);",
+                  "        console.log('Token de admin guardado:', response.data.token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@trekking.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('auth_token', response.data.token);",
+                  "        console.log('Token de usuario guardado:', response.data.token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Perfil de Usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/profile",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Reservas",
+      "item": [
+        {
+          "name": "Crear Reserva",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_fecha_viaje\": 1,\n  \"cantidad_personas\": 2,\n  \"observaciones_reserva\": \"Reserva para dos personas, preferencia por la mañana\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas",
+              "host": ["{{base_url}}"],
+              "path": ["reservas"]
+            }
+          }
+        },
+        {
+          "name": "Mis Reservas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reservas/mis-reservas",
+              "host": ["{{base_url}}"],
+              "path": ["reservas", "mis-reservas"]
+            }
+          }
+        },
+        {
+          "name": "Todas las Reservas (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reservas",
+              "host": ["{{base_url}}"],
+              "path": ["reservas"]
+            }
+          }
+        },
+        {
+          "name": "Cambiar Estado de Reserva (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado_reserva\": \"confirmada\",\n  \"observaciones_reserva\": \"Reserva confirmada por el administrador. Todo listo para el viaje.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas/1/estado",
+              "host": ["{{base_url}}"],
+              "path": ["reservas", "1", "estado"]
+            }
+          }
+        },
+        {
+          "name": "Cancelar Reserva",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reservas/1/cancelar",
+              "host": ["{{base_url}}"],
+              "path": ["reservas", "1", "cancelar"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏔️ Categorías",
+      "item": [
+        {
+          "name": "Listar Categorías",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categorias",
+              "host": ["{{base_url}}"],
+              "path": ["categorias"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Categoría por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categorias/1",
+              "host": ["{{base_url}}"],
+              "path": ["categorias", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear Categoría (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre_categoria\": \"Trekking Extremo\",\n  \"descripcion_categoria\": \"Aventuras de alta montaña para expertos\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/categorias",
+              "host": ["{{base_url}}"],
+              "path": ["categorias"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🚶‍♂️ Viajes",
+      "item": [
+        {
+          "name": "Listar Viajes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/viajes",
+              "host": ["{{base_url}}"],
+              "path": ["viajes"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Viaje por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/viajes/1",
+              "host": ["{{base_url}}"],
+              "path": ["viajes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Viajes por Categoría",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/viajes/categoria/1",
+              "host": ["{{base_url}}"],
+              "path": ["viajes", "categoria", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear Viaje (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre_viaje\": \"Cerro Aconcagua\",\n  \"descripcion_viaje\": \"Ascenso al pico más alto de América\",\n  \"duracion_viaje\": 15,\n  \"dificultad_viaje\": \"Extrema\",\n  \"precio_viaje\": 2500.00,\n  \"ubicacion_viaje\": \"Mendoza, Argentina\",\n  \"id_categoria\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/viajes",
+              "host": ["{{base_url}}"],
+              "path": ["viajes"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
