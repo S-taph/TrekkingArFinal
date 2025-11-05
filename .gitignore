@@ -100,3 +100,13 @@ back/migrations/*.sql
 
 # Archivos temporales
 nul
+/test_*.json
+/test*.json
+
+# Scripts temporales y de migración en raíz de back/
+/back/*.js
+/back/*.sql
+
+# Excepciones: archivos que sí queremos en back/
+!/back/package.json
+!/back/package-lock.json
