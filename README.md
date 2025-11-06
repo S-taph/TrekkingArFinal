@@ -1,9 +1,9 @@
 # DOCUMENTACIÓN Y RECURSOS EXTRAS
 ## DOCUMENTACIÓN ACTUALIZADA DEL PROYECTO
-### Link:
+    Link:
 ## LINK AL VIDEO DE LA PRESENTACIÓN
-### Link:
+    Link:
 ## TABLERO ACTUALIZADO DE KANBANFLOW
-### Link: https://kanbanflow.com/board/mcA5MWH
+    Link: https://kanbanflow.com/board/mcA5MWH
 ## DER
-### Link:
+    Link:
